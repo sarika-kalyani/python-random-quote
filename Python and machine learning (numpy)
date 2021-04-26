@@ -1,0 +1,491 @@
+Introduction to NumPy:¶
+NumPy stands for Numerical Python and it's a fundamental package for scientific computing in Python. NumPy provides Python with an extensive math library capable of performing numerical computations effectively and efficiently. These lessons are intended as a basic overview of NumPy and introduces some of its most important features.
+
+Why Numpy:
+You may be wondering why people use NumPy - after all, Python can handle lists, as you learned in the Intro to Python lessons.
+
+Even though Python lists are great on their own, NumPy has a number of key features that give it great advantages over Python lists. One such feature is speed. When performing operations on large arrays NumPy can often perform several orders of magnitude faster than Python lists. This speed comes from the nature of NumPy arrays being memory-efficient and from optimized algorithms used by NumPy for doing arithmetic, statistical, and linear algebra operations.
+
+In [ ]:
+import time
+import numpy as np
+In [ ]:
+x = np.random.rand(1000000000)
+In [ ]:
+start = time.time()
+mean = sum(x)/len(x)
+print(time.time() - start)
+164.07553839683533
+In [ ]:
+start = time.time()
+mean_np = np.mean(x)
+print(time.time() - start)
+0.6675674915313721
+Creating NumPy ndarrays:
+At the core of NumPy is the ndarray, where nd stands for n-dimensional. An ndarray is a multidimensional array of elements all of the same type. In other words, an ndarray is a grid that can take on many shapes and can hold either numbers or strings. In many Machine Learning problems you will often find yourself using ndarrays in many different ways. For instance, you might use an ndarray to hold the pixel values of an image that will be fed into a Neural Network for image classification.
+
+There are several ways to create ndarrays in NumPy. In the following lessons we will see two ways to create ndarrays:
+
+Using regular Python lists
+
+Using built-in NumPy functions
+
+In this section, we will create ndarrays by providing Python lists to the NumPy np.array() function, it is just a function that returns an ndarray. We should note that for the purposes of clarity, the examples throughout these lessons will use small and simple ndarrays. Let's start by creating 1-Dimensional (1D) ndarrays.
+
+In [ ]:
+# We import NumPy into Python
+import numpy as np
+
+# We create a 1D ndarray that contains only integers
+x = np.array([1, 2, 3, 4, 5])
+
+# Let's print the ndarray we just created using the print() command
+print('x = ', x)
+x =  [1 2 3 4 5]
+Shape of an ndarray:
+Another important property of arrays is their shape. The shape of an array is the size along each of its dimensions. As you will see, NumPy ndarrays have attributes that allows us to get information about them in a very intuitive way. For example, the shape of an ndarray can be obtained using the .shape attribute. The shape attribute returns a tuple of N positive integers that specify the sizes of each dimension.
+
+In [ ]:
+# We create a 1D ndarray that contains only integers
+x = np.array([1, 2, 3, 4, 5])
+
+# We print x
+print()
+print('x = ', x)
+print()
+
+# We print information about x
+print('x has dimensions:', x.shape)
+print('x is an object of type:', type(x))
+print('The elements in x are of type:', x.dtype)
+x =  [1 2 3 4 5]
+
+x has dimensions: (5,)
+x is an object of type: <class 'numpy.ndarray'>
+The elements in x are of type: int64
+We can see that the shape attribute returns the tuple (5,) telling us that x is of rank 1 (i.e. x only has 1 dimension ) and it has 5 elements. The type() function tells us that x is indeed a NumPy ndarray. Finally, the .dtype attribute tells us that the elements of x are stored in memory as signed 64-bit integers. Another great advantage of NumPy is that it can handle more data-types than Python lists.here
+
+As mentioned earlier, ndarrays can also hold strings. Let's see how we can create a rank 1 ndarray of strings in the same manner as before, by providing the np.array() function a Python list of strings.
+
+In [ ]:
+# We create a rank 1 ndarray that only contains strings
+x = np.array(['Hello', 'World'])
+
+# We print x
+print()
+print('x = ', x)
+print()
+
+# We print information about x
+print('x has dimensions:', x.shape)
+print('x is an object of type:', type(x))
+print('The elements in x are of type:', x.dtype)
+x =  ['Hello' 'World']
+
+x has dimensions: (2,)
+x is an object of type: <class 'numpy.ndarray'>
+The elements in x are of type: <U5
+It is important to remember that one big difference between Python lists and ndarrays, is that unlike Python lists, all the elements of an ndarray must be of the same type. So, while we can create Python lists with both integers and strings, we can't mix types in ndarrays. If you provide the np.array() function with a Python list that has both integers and strings, NumPy will interpret all elements as strings. We can see this in the next example:
+
+In [ ]:
+# We create a rank 1 ndarray from a Python list that contains integers and strings
+x = np.array([1, 2, 'World'])
+
+# We print the ndarray
+print()
+print('x = ', x)
+print()
+
+# We print information about x
+print('x has dimensions:', x.shape)
+print('x is an object of type:', type(x))
+print('The elements in x are of type:', x.dtype)
+x =  ['1' '2' 'World']
+
+x has dimensions: (3,)
+x is an object of type: <class 'numpy.ndarray'>
+The elements in x are of type: <U21
+Let us now look at how we can create a rank 2 ndarray from a nested Python list.
+
+In [ ]:
+# We create a rank 2 ndarray that only contains integers
+Y = np.array([[1,2,3],[4,5,6],[7,8,9], [10,11,12]])
+
+# We print Y
+print()
+print('Y = \n', Y)
+print()
+
+# We print information about Y
+print('Y has dimensions:', Y.shape)
+print('Y has a total of', Y.size, 'elements')
+print('Y is an object of type:', type(Y))
+print('The elements in Y are of type:', Y.dtype)
+Y = 
+ [[ 1  2  3]
+ [ 4  5  6]
+ [ 7  8  9]
+ [10 11 12]]
+
+Y has dimensions: (4, 3)
+Y has a total of 12 elements
+Y is an object of type: <class 'numpy.ndarray'>
+The elements in Y are of type: int64
+Up to now, we have only created ndarrays with integers and strings. We saw that when we create an ndarray with only integers, NumPy will automatically assign the dtype int64 to its elements. Let's see what happens when we create ndarrays with floats and integers.
+
+In [ ]:
+# We create a rank 1 ndarray that contains integers
+x = np.array([1,2,3])
+
+# We create a rank 1 ndarray that contains floats
+y = np.array([1.0,2.0,3.0])
+
+# We create a rank 1 ndarray that contains integers and floats
+z = np.array([1, 2.5, 4])
+
+# We print the dtype of each ndarray
+print('The elements in x are of type:', x.dtype)
+print('The elements in y are of type:', y.dtype)
+print('The elements in z are of type:', z.dtype)
+The elements in x are of type: int64
+The elements in y are of type: float64
+The elements in z are of type: float64
+Notice that when we create an ndarray with both floats and integers, as we did with the z ndarray above, NumPy assigns its elements a float64 dtype as well. This is called upcasting. Since all the elements of an ndarray must be of the same type, in this case NumPy upcasts the integers in z to floats in order to avoid losing precision in numerical computations.
+
+Even though NumPy automatically selects the dtype of the ndarray, NumPy also allows you to specify the particular dtype you want to assign to the elements of the ndarray. You can specify the dtype when you create the ndarray using the keyword dtype in the np.array() function. Let's see an example:
+
+In [ ]:
+# We create a rank 1 ndarray of floats but set the dtype to int64
+x = np.array([1.5, 2.2, 3.7, 4.0, 5.9], dtype = np.int64)
+
+# We print x
+print()
+print('x = ', x)
+print()
+
+# We print the dtype x
+print('The elements in x are of type:', x.dtype)
+x =  [1 2 3 4 5]
+
+The elements in x are of type: int64
+Once you create an ndarray, you may want to save it to a file to be read later or to be used by another program. NumPy provides a way to save the arrays into files for later use - let's see how this is done.
+
+In [ ]:
+# We create a rank 1 ndarray
+x = np.array([1, 2, 3, 4, 5])
+
+# We save x into the current directory as 
+np.save('my_array', x)
+The above saves the x ndarray into a file named my_array.npy. You can load the saved ndarray into a variable by using the load() function.
+
+When loading an array from a file, make sure you include the name of the file together with the extension .npy, otherwise you will get an error.
+
+In [ ]:
+# We load the saved array from our current directory into variable y
+y = np.load('my_array.npy')
+
+# We print y
+print()
+print('y = ', y)
+print()
+
+# We print information about the ndarray we loaded
+print('y is an object of type:', type(y))
+print('The elements in y are of type:', y.dtype)
+y =  [1 2 3 4 5]
+
+y is an object of type: <class 'numpy.ndarray'>
+The elements in y are of type: int64
+Accessing Elements in ndarays:
+Elements can be accessed using indices inside square brackets, [ ]. NumPy allows you to use both positive and negative indices to access elements in the ndarray. Positive indices are used to access elements from the beginning of the array, while negative indices are used to access elements from the end of the array.
+
+In [ ]:
+# We create a rank 1 ndarray that contains integers from 1 to 5
+x = np.array([1, 2, 3, 4, 5])
+
+# We print x
+print()
+print('x = ', x)
+print()
+
+# Let's access some elements with positive indices
+print('This is First Element in x:', x[0]) 
+print('This is Second Element in x:', x[1])
+print('This is Fifth (Last) Element in x:', x[4])
+print()
+
+# Let's access the same elements with negative indices
+print('This is First Element in x:', x[-5])
+print('This is Second Element in x:', x[-4])
+print('This is Fifth (Last) Element in x:', x[-1])
+Modifying ndarrays:
+Now let's see how we can change the elements in rank 1 ndarrays. We do this by accessing the element we want to change and then using the = sign to assign the new value:
+
+In [ ]:
+# We create a rank 1 ndarray that contains integers from 1 to 5
+x = np.array([1, 2, 3, 4, 5])
+
+# We print the original x
+print()
+print('Original:\n x = ', x)
+print()
+
+# We change the fourth element in x from 4 to 20
+x[3] = 20
+
+# We print x after it was modified 
+print('Modified:\n x = ', x)
+Original:
+ x =  [1 2 3 4 5]
+
+Modified:
+ x =  [ 1  2  3 20  5]
+Similarly, we can also access and modify specific elements of rank 2 ndarrays. To access elements in rank 2 ndarrays we need to provide 2 indices in the form [row, column]. Let's see some examples
+
+In [ ]:
+# We create a 3 x 3 rank 2 ndarray that contains integers from 1 to 9
+X = np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+# We print X
+print()
+print('X = \n', X)
+print()
+
+# Let's access some elements in X
+print('This is (0,0) Element in X:', X[0,0])
+print('This is (0,1) Element in X:', X[0,1])
+print('This is (2,2) Element in X:', X[2,2])
+X = 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+
+This is (0,0) Element in X: 1
+This is (0,1) Element in X: 2
+This is (2,2) Element in X: 9
+Elements in rank 2 ndarrays can be modified in the same way as with rank 1 ndarrays. Let's see an example:
+
+In [ ]:
+# We create a 3 x 3 rank 2 ndarray that contains integers from 1 to 9
+X = np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+# We print the original x
+print()
+print('Original:\n X = \n', X)
+print()
+
+# We change the (0,0) element in X from 1 to 20
+X[0,0] = 20
+
+# We print X after it was modified 
+print('Modified:\n X = \n', X)
+Original:
+ X = 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+
+Modified:
+ X = 
+ [[20  2  3]
+ [ 4  5  6]
+ [ 7  8  9]]
+Adding and Deleting elements:
+Now, let's take a look at how we can add and delete elements from ndarrays. We can delete elements using the np.delete(ndarray, elements, axis) function. This function deletes the given list of elements from the given ndarray along the specified axis. For rank 1 ndarrays the axis keyword is not required. For rank 2 ndarrays, axis = 0 is used to select rows, and axis = 1 is used to select columns. Let's see some examples:
+
+In [ ]:
+# We create a rank 1 ndarray 
+x = np.array([1, 2, 3, 4, 5])
+
+# We create a rank 2 ndarray
+Y = np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+# We print x
+print()
+print('Original x = ', x)
+
+# We delete the first and last element of x
+x = np.delete(x, [0,4])
+
+# We print x with the first and last element deleted
+print()
+print('Modified x = ', x)
+
+# We print Y
+print()
+print('Original Y = \n', Y)
+
+# We delete the first row of y
+w = np.delete(Y, 0, axis=0)
+
+# We delete the first and last column of y
+v = np.delete(Y, [0,2], axis=1)
+
+# We print w
+print()
+print('w = \n', w)
+
+# We print v
+print()
+print('v = \n', v)
+Original x =  [1 2 3 4 5]
+
+Modified x =  [2 3 4]
+
+Original Y = 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+
+w = 
+ [[4 5 6]
+ [7 8 9]]
+
+v = 
+ [[2]
+ [5]
+ [8]]
+We can append values to ndarrays using the np.append(ndarray, elements, axis) function. This function appends the given list of elements to ndarray along the specified axis. Let's see some examples:
+
+In [ ]:
+# We create a rank 1 ndarray 
+x = np.array([1, 2, 3, 4, 5])
+
+# We create a rank 2 ndarray 
+Y = np.array([[1,2,3],[4,5,6]])
+
+# We print x
+print()
+print('Original x = ', x)
+
+# We append the integer 6 to x
+x = np.append(x, 6)
+
+# We print x
+print()
+print('x = ', x)
+
+# We append the integer 7 and 8 to x
+x = np.append(x, [7,8])
+
+# We print x
+print()
+print('x = ', x)
+
+# We print Y
+print()
+print('Original Y = \n', Y)
+
+# We append a new row containing 7,8,9 to y
+v = np.append(Y, [[7,8,9]], axis=0)
+
+# We append a new column containing 9 and 10 to y
+q = np.append(Y,[[9],[10]], axis=1)
+
+# We print v
+print()
+print('v = \n', v)
+
+# We print q
+print()
+print('q = \n', q)
+Original x =  [1 2 3 4 5]
+
+x =  [1 2 3 4 5 6]
+
+x =  [1 2 3 4 5 6 7 8]
+
+Original Y = 
+ [[1 2 3]
+ [4 5 6]]
+
+v = 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+
+q = 
+ [[ 1  2  3  9]
+ [ 4  5  6 10]]
+Now let's see now how we can insert values to ndarrays. We can insert values to ndarrays using the np.insert(ndarray, index, elements, axis) function. This function inserts the given list of elements to ndarray right before the given index along the specified axis. Let's see some examples:
+
+In [ ]:
+# We create a rank 1 ndarray 
+x = np.array([1, 2, 5, 6, 7])
+
+# We create a rank 2 ndarray 
+Y = np.array([[1,2,3],[7,8,9]])
+
+# We print x
+print()
+print('Original x = ', x)
+
+# We insert the integer 3 and 4 between 2 and 5 in x. 
+x = np.insert(x,2,[3,4])
+
+# We print x with the inserted elements
+print()
+print('x = ', x)
+
+# We print Y
+print()
+print('Original Y = \n', Y)
+
+# We insert a row between the first and last row of y
+w = np.insert(Y,1,[4,5,6],axis=0)
+
+# We insert a column full of 5s between the first and second column of y
+v = np.insert(Y,1,5, axis=1)
+
+# We print w
+print()
+print('w = \n', w)
+
+# We print v
+print()
+print('v = \n', v)
+NumPy also allows us to stack ndarrays on top of each other, or to stack them side by side. The stacking is done using either the np.vstack() function for vertical stacking, or the np.hstack() function for horizontal stacking. It is important to note that in order to stack ndarrays, the shape of the ndarrays must match. Let's see some examples:
+
+In [ ]:
+# We create a rank 1 ndarray 
+x = np.array([1,2])
+
+# We create a rank 2 ndarray 
+Y = np.array([[3,4],[5,6]])
+
+# We print x
+print()
+print('x = ', x)
+
+# We print Y
+print()
+print('Y = \n', Y)
+
+# We stack x on top of Y
+z = np.vstack((x,Y))
+
+# We stack x on the right of Y. We need to reshape x in order to stack it on the right of Y. 
+w = np.hstack((Y,x.reshape(2,1)))
+
+# We print z
+print()
+print('z = \n', z)
+
+# We print w
+print()
+print('w = \n', w)
+x =  [1 2]
+
+Y = 
+ [[3 4]
+ [5 6]]
+
+z = 
+ [[1 2]
+ [3 4]
+ [5 6]]
+
+w = 
+ [[3 4 1]
+ [5 6 2]]
+In [ ]:
